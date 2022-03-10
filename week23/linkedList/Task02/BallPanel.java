@@ -23,6 +23,21 @@ class BallPanel extends JPanel {
 
 	public BallPanel() {
 		timer.start();
+		addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int x = e.getX();
+				int y = e.getY();
+				for(int i = 0; i < list.size(); i++) {
+					Ball ball = (Ball) list.get(i);
+					double distance = Math.sqrt(Math.pow(ball.x - x, 2) + Math.pow(ball.y - y, 2));
+					if (distance < ball.radius) {
+						list.remove(ball);
+						repaint();
+					}
+				}
+			}
+		});
 	}
 
 	public void add() {
@@ -59,6 +74,7 @@ class BallPanel extends JPanel {
 							ball1.dx = ((int) (ball1.dx * 0.75)) + 1;
 							ball1.dy = ((int) (ball1.dy * 0.75)) + 1;
 							list.remove(ball2);
+							break;
 						}
 					}
 				}
