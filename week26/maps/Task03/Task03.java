@@ -1,20 +1,22 @@
-package sets.Task02;
+package maps.Task03;
 
+import java.io.File;
 import java.util.*;
-import java.io.*;
+import java.util.stream.Collectors;
 
-public class CountKeywords {
+public class Task03 {
     public static void main(String[] args) throws Exception {
-        File file = new File("src/sets/Task02/TestHashSet.java");
+        File file = new File("src/maps/Task03/TestHashSet.java");
         if (file.exists()) {
-            System.out.println("The number of keywords is " + countKeywords(file));
+            for (Map.Entry<String, Integer> entry: countKeywords(file).entrySet()) {
+                System.out.printf("%s: %d\n", entry.getKey(), entry.getValue());
+            }
         } else {
             System.out.println("File does not exist");
         }
-
     }
 
-    public static int countKeywords(File file) throws Exception {
+    public static Map<String, Integer> countKeywords(File file) throws Exception {
         // Array of all Java keywords + true, false and null
         String[] keywordString = { "abstract", "assert", "boolean", "break", "byte", "case", "catch", "char", "class",
                 "const", "continue", "default", "do", "double", "else", "enum", "extends", "for", "final", "finally",
@@ -22,8 +24,8 @@ public class CountKeywords {
                 "new", "package", "private", "protected", "public", "return", "short", "static", "strictfp", "super",
                 "switch", "synchronized", "this", "throw", "throws", "transient", "try", "void", "volatile", "while",
                 "true", "false", "null" };
-        Set<String> keywordSet = new HashSet<String>(Arrays.asList(keywordString));
-        int count = 0;
+        Map<String, Integer> map = new LinkedHashMap<>(Arrays.stream(keywordString).collect(Collectors.toMap(x -> x, x -> 0)));
+
         boolean stringFlag = false, singleLineCommentFlag = false, multilineCommentFlag = false;
 
 
@@ -42,13 +44,12 @@ public class CountKeywords {
                     multilineCommentFlag = true;
                 if (word.contains("*/"))
                     multilineCommentFlag = false;
-                System.out.println(word);
-                if (!stringFlag && !singleLineCommentFlag && !multilineCommentFlag && keywordSet.contains(word))
-                    count++;
+                if (!stringFlag && !singleLineCommentFlag && !multilineCommentFlag && map.containsKey(word))
+                    map.put(word, map.get(word) + 1);
             }
             singleLineCommentFlag = false;
         }
         input.close();
-        return count;
+        return map;
     }
 }
