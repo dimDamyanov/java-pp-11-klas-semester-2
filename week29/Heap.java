@@ -3,7 +3,7 @@ package week29;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class Heap <E extends Comparable<E> & Cloneable> {
+public class Heap <E extends Comparable<E>> implements Cloneable {
     private ArrayList<E> list = new ArrayList<>();
 
     /**
@@ -93,8 +93,9 @@ public class Heap <E extends Comparable<E> & Cloneable> {
     }
 
     public Object clone() throws CloneNotSupportedException {
-        Heap<E> clone = (Heap<E>) super.clone();
-        clone.list = (ArrayList<E>) this.list.clone();
+        Heap<E> clone = new Heap<>();
+        for (E element: this.list)
+            clone.add(element);
         return clone;
     }
 }
